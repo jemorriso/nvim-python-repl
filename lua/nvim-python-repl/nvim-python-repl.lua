@@ -142,7 +142,7 @@ local send_message = function(filetype, message, config)
     if M.term.opened == 0 then
         term_open(filetype, config)
     end
-    vim.wait(600)
+    -- vim.wait(600)
     if filetype == "python" or filetype == "lua" then
         if vim.fn.has('win32') == 1 then
             message = message .. "\r\n"
@@ -159,9 +159,9 @@ local send_message = function(filetype, message, config)
         api.nvim_chan_send(M.term.chanid, message)
     end
     if config.execute_on_send then
-        vim.wait(500)
+        -- vim.wait(500)
         if vim.fn.has('win32') == 1 then
-            vim.wait(200)
+            -- vim.wait(200)
             -- For Windows, simulate pressing Enter
             api.nvim_chan_send(M.term.chanid, api.nvim_replace_termcodes("<C-m>", true, false, true))
         else
