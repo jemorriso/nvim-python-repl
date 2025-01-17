@@ -26,8 +26,7 @@ local get_statement_definition = function(filetype)
 	if node:named() == false then
 		error("Node not recognized. Check to ensure treesitter parser is installed.")
 	end
-	-- if filetype == "python" or filetype == "scala" then
-	if filetype == "python" or filetype == "scala" or filetype == "markdown" then
+	if filetype == "python" or filetype == "scala" then
 		while
 			string.match(node:sexpr(), "import") == nil
 			and string.match(node:sexpr(), "statement") == nil
@@ -72,8 +71,6 @@ local term_open = function(filetype, config)
 		if filetype == "scala" then
 			choice = config.spawn_command.scala
 		elseif filetype == "python" then
-			choice = config.spawn_command.python
-		elseif filetype == "markdown" then
 			choice = config.spawn_command.python
 		elseif filetype == "lua" then
 			choice = config.spawn_command.lua
@@ -124,8 +121,7 @@ local construct_message_from_node = function(filetype)
 	local node = get_statement_definition(filetype)
 	local bufnr = api.nvim_get_current_buf()
 	local message = vim.treesitter.get_node_text(node, bufnr)
-	-- if filetype == "python" then
-	if filetype == "python" or filetype == "markdown" then
+	if filetype == "python" then
 		-- For Python, we need to preserve the original indentation
 		local start_row, start_column, end_row, _ = node:range()
 		if vim.fn.has("win32") == 1 then
@@ -150,8 +146,7 @@ local send_message = function(filetype, message, config)
 		term_open(filetype, config)
 	end
 	-- vim.wait(600)
-	-- if filetype == "python" or filetype == "lua" then
-	if filetype == "python" or filetype == "lua" or filetype == "markdown" then
+	if filetype == "python" or filetype == "lua" then
 		if vim.fn.has("win32") == 1 then
 			message = message .. "\r\n"
 		else
